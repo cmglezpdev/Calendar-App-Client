@@ -9,6 +9,7 @@ import { Navbar } from "../ui/Navbar"
 // Traduccion de la aplicaicon al español
 import 'moment/locale/es';
 import { messages_es } from '../../helpers/calendar-messages-es'
+import { CalendarModal } from "./CalendarModal";
 moment.locale('es');
 
 
@@ -78,6 +79,8 @@ export const CalendarScreen = () => {
         onSelectEvent={onSelectEvent}
         onView={onViewChange}
       />
+
+      <CalendarModal />
     </div>
   )
 }
