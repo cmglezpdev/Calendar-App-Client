@@ -6,6 +6,7 @@ import moment from "moment";
 import Swal from "sweetalert2";
 
 import { uiCloseModal } from '../../actions/ui.js';
+import { eventAddNew } from "../../actions/events.js";
 
 Modal.setAppElement('#root');
 const NOW = moment().minutes(0).second(0).add(1, 'hours').toDate();
@@ -69,6 +70,16 @@ export const CalendarModal = ({ children }) => {
         } else {
             setTitleValid(true);
         }
+
+        dispatch(eventAddNew({
+            ...formValues,
+            id: new Date().getTime(),
+            user: {
+                _id: 12345,
+                name: 'Carlos',
+            }
+        }));
+
         setTitleValid(true);
         closeModal();
     }
