@@ -2,27 +2,74 @@ import { useState } from "react";
 import Modal from "react-modal";
 import DateTimePicker from 'react-datetime-picker';
 import moment from "moment";
+import Swal from "sweetalert2";
 
 Modal.setAppElement('#root');
 const NOW = moment().minutes(0).second(0).add(1, 'hours').toDate();
 const NOW_PLUS_ONE = moment(NOW).add(1, 'hours').toDate();
 
-export const CalendarModal = ({ children }) => {
 
+export const CalendarModal = ({ children }) => {
+    
+    const [titleValid, setTitleValid] = useState(null);
     const [dateStart, setDateStart] = useState(NOW)
     const [dateEnd, setDateEnd] = useState(NOW_PLUS_ONE)
+    const [formValues, setFormValues] = useState({
+        title: 'Evento',
+        notes: '',
+        start: NOW,
+        end: NOW_PLUS_ONE,
+    })
+    const { notes, title, start, end } = formValues;
 
+    
     const closeModal = () => {
+        // TODO: cerrar el modal
     }
 
     const hanldeChangeStartDate = ( date ) => {
         setDateStart(date)
+        setFormValues({
+            ...formValues,
+            start: date
+        })
     }
 
     const hanldeChangeEndDate = ( date ) => {
         setDateEnd(date)
+        setFormValues({
+            ...formValues,
+            end: date
+        })
     }
 
+    const handleInputChange = ({ target }) => {
+        setFormValues({
+            ...formValues,
+            [target.name]: target.value
+        })
+    }
+
+    const handleSubmitForm = (e) => {
+        e.preventDefault();
+        
+        const momentStart = moment(start);
+        const momentEnd = moment(end);
+        if( momentStart.isSameOrAfter(momentEnd) ) {
+            Swal.fire('Error', 'La fecha de inicio debe ser menor a la fecha de fin', 'error');
+            return;
+        }
+
+        if( title.trim().length < 2 ) {
+            setTitleValid(false);
+            // Swal.fire('Error', 'El titulo debe tener al menos 2 caracteres', 'error');
+            return;
+        } else {
+            setTitleValid(true);
+        }
+        setTitleValid(true);
+        closeModal();
+    }
 
     return (
         <Modal
@@ -36,11 +83,16 @@ export const CalendarModal = ({ children }) => {
         >
             <h1 className="text-4xl pb-3"> Nuevo evento </h1>
             <hr  className="pb-4"/>
-            <form className="w-full">
+            <form className="w-full" onSubmit={handleSubmitForm}>
 
                 <div className="flex flex-col mb-4">
                     <label className="font-medium text-lg">Fecha y hora inicio</label>
-                    <DateTimePicker onChange={hanldeChangeStartDate} value={dateStart} className="p-2 border-gray-700 border-2 rounded outline-none" placeholder="Fecha inicio" />
+                    <DateTimePicker 
+                        onChange={hanldeChangeStartDate} 
+                        value={dateStart}
+                        className="p-2 border-gray-700 border-2 rounded outline-none" 
+                        placeholder="Fecha inicio" 
+                    />
                 </div>
 
                 <div className="flex flex-col mb-2">
@@ -59,11 +111,18 @@ export const CalendarModal = ({ children }) => {
                     <label className="font-medium text-lg">Titulo y notas</label>
                     <input 
                         type="text" 
-                        className="p-2 border-gray-700 border-2 rounded outline-none"
+                        className={`p-2 border-gray-700 border-2 rounded outline-none
+                         ${ titleValid === false  && 'border-red-600 text-red-600' }
+                         ${ titleValid === true  && 'border-green-600 text-green-600'}
+                         `}
                         placeholder="Título del evento"
                         name="title"
+                        value={title}
+                        onChange={handleInputChange}
                         autoComplete="off"
                     />
+                    { titleValid === false && <i className="fas fa-sad-tear absolute right-8 mt-11 text-red-600"></i> }
+                    { titleValid === true &&  <i className="fas fa-smile-beam absolute right-8 mt-11 text-green-600"></i> }
                     <small id="emailHelp" className="mt-2 text-gray-600">Una descripción corta</small>
                 </div>
 
@@ -74,6 +133,8 @@ export const CalendarModal = ({ children }) => {
                         placeholder="Notas"
                         rows="5"
                         name="notes"
+                        value={notes}
+                        onChange={handleInputChange}
                     ></textarea>
                     <small id="emailHelp" className=" text-gray-600">Información adicional</small>
                 </div>
