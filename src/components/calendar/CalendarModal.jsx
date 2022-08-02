@@ -36,6 +36,8 @@ export const CalendarModal = () => {
 
         if( activeEvent ) {
             setFormValues(activeEvent);
+        } else {
+            setFormValues(initEvent);
         }
 
     }, [ activeEvent, setFormValues ]);
@@ -45,7 +47,6 @@ export const CalendarModal = () => {
        dispatch( eventClearActiveEvent() );
        setFormValues(initEvent);
     }
-
     const hanldeChangeStartDate = ( date ) => {
         setDateStart(date)
         setFormValues({
@@ -109,7 +110,7 @@ export const CalendarModal = () => {
             className={"modal"}
             overlayClassName={"modal-fondo"}
         >
-            <h1 className="text-4xl pb-3"> Nuevo evento </h1>
+            <h1 className="text-4xl pb-3"> { activeEvent ? "Editar Evento" : "Nuevo Evento" } </h1>
             <hr  className="pb-4"/>
             <form className="w-full" onSubmit={handleSubmitForm}>
 

@@ -11,7 +11,7 @@ export const AddNewFab = () => {
 
     return (
         <div 
-            className="fixed rounded-full px-6 py-5 right-6 bottom-6 bg-blue-800 text-white text-2xl hover:bg-blue-600 transition"
+            className="fixed rounded-full px-6 py-5 right-6 bottom-6 bg-blue-800 text-white text-2xl hover:bg-blue-600 transition z-50"
             onClick={handleClickNew}
         >
             <i className="fas fa-plus"></i>
