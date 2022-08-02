@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Modal from "react-modal";
 import DateTimePicker from 'react-datetime-picker';
@@ -6,32 +6,44 @@ import moment from "moment";
 import Swal from "sweetalert2";
 
 import { uiCloseModal } from '../../actions/ui.js';
-import { eventAddNew } from "../../actions/events.js";
+import { eventAddNew, eventClearActiveEvent, eventUpdated } from "../../actions/events.js";
 
 Modal.setAppElement('#root');
 const NOW = moment().minutes(0).second(0).add(1, 'hours').toDate();
 const NOW_PLUS_ONE = moment(NOW).add(1, 'hours').toDate();
 
+const initEvent = {
+    title: "",
+    notes: '',
+    start: NOW,
+    end: NOW_PLUS_ONE,
+}
 
-export const CalendarModal = ({ children }) => {
+
+export const CalendarModal = () => {
     
     const [titleValid, setTitleValid] = useState(null);
     const [dateStart, setDateStart] = useState(NOW)
     const [dateEnd, setDateEnd] = useState(NOW_PLUS_ONE)
-    const [formValues, setFormValues] = useState({
-        title: 'Evento',
-        notes: '',
-        start: NOW,
-        end: NOW_PLUS_ONE,
-    })
+    const [formValues, setFormValues] = useState(initEvent);
     const { notes, title, start, end } = formValues;
 
-
     const { modalOpen }  = useSelector(state => state.ui);
+    const { activeEvent }  = useSelector(state => state.calendar);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+
+        if( activeEvent ) {
+            setFormValues(activeEvent);
+        }
+
+    }, [ activeEvent, setFormValues ]);
 
     const closeModal = () => {
        dispatch( uiCloseModal() );
+       dispatch( eventClearActiveEvent() );
+       setFormValues(initEvent);
     }
 
     const hanldeChangeStartDate = ( date ) => {
@@ -71,14 +83,18 @@ export const CalendarModal = ({ children }) => {
             setTitleValid(true);
         }
 
-        dispatch(eventAddNew({
-            ...formValues,
-            id: new Date().getTime(),
-            user: {
-                _id: 12345,
-                name: 'Carlos',
-            }
-        }));
+        if ( activeEvent ) { // Estoy modificando un evento
+            dispatch( eventUpdated( formValues ) );
+        } else { // Estoy añadiendo nueva nota
+            dispatch(eventAddNew({
+                ...formValues,
+                id: new Date().getTime(),
+                user: {
+                    id: 12345,
+                    name: 'Carlos',
+                }
+            }));
+        }
 
         setTitleValid(true);
         closeModal();

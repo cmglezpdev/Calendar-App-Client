@@ -20,25 +20,11 @@ moment.locale('es');
 
 const localizer = momentLocalizer(moment)
 
-const events = [
-  {
-    title: 'Boss Brithday',
-    start: moment().toDate(),
-    end: moment().add(2, 'hours').toDate(),
-    bgcolor: '#fafafa',
-    notes: 'A big day for boss',
-    user: {
-      _id: '5c9d8f8f8f8f8f8f8f8f8f8',
-      name: 'Carlos'
-    }
-  }
-]
-
-
 export const CalendarScreen = () => {
 
-  const [lastView, setLastView] = useState( localStorage.getItem('lastView') || 'month' );
   const dispatch = useDispatch();
+  const { events } = useSelector(state => state.calendar);
+  const [lastView, setLastView] = useState( localStorage.getItem('lastView') || 'month' );
 
   const onDoubleClick = (e) => {
     dispatch( uiOpenModal() )
@@ -46,7 +32,6 @@ export const CalendarScreen = () => {
 
   const onSelectEvent = ( event ) => {
       dispatch( eventSetActive( event ) );
-      dispatch( uiOpenModal() );
   }
 
   const onViewChange = (e) => {
