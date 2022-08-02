@@ -1,6 +1,9 @@
+import { Navbar } from "../ui/Navbar"
 
 export const CalendarScreen = () => {
   return (
-    <div>CalendarScreen</div>
+    <div>
+      <Navbar />
+    </div>
   )
 }
