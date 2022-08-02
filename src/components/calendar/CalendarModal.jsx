@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import Modal from "react-modal";
 import DateTimePicker from 'react-datetime-picker';
 import moment from "moment";
 import Swal from "sweetalert2";
+
+import { uiCloseModal } from '../../actions/ui.js';
 
 Modal.setAppElement('#root');
 const NOW = moment().minutes(0).second(0).add(1, 'hours').toDate();
@@ -22,9 +25,12 @@ export const CalendarModal = ({ children }) => {
     })
     const { notes, title, start, end } = formValues;
 
-    
+
+    const { modalOpen }  = useSelector(state => state.ui);
+    const dispatch = useDispatch();
+
     const closeModal = () => {
-        // TODO: cerrar el modal
+       dispatch( uiCloseModal() );
     }
 
     const hanldeChangeStartDate = ( date ) => {
@@ -34,7 +40,6 @@ export const CalendarModal = ({ children }) => {
             start: date
         })
     }
-
     const hanldeChangeEndDate = ( date ) => {
         setDateEnd(date)
         setFormValues({
@@ -42,14 +47,12 @@ export const CalendarModal = ({ children }) => {
             end: date
         })
     }
-
     const handleInputChange = ({ target }) => {
         setFormValues({
             ...formValues,
             [target.name]: target.value
         })
     }
-
     const handleSubmitForm = (e) => {
         e.preventDefault();
         
@@ -62,7 +65,6 @@ export const CalendarModal = ({ children }) => {
 
         if( title.trim().length < 2 ) {
             setTitleValid(false);
-            // Swal.fire('Error', 'El titulo debe tener al menos 2 caracteres', 'error');
             return;
         } else {
             setTitleValid(true);
@@ -73,13 +75,12 @@ export const CalendarModal = ({ children }) => {
 
     return (
         <Modal
-            isOpen={ true }
+            isOpen={ modalOpen }
             onRequestClose={closeModal}
             style={customModalStyles}
             closeTimeoutMS={ 200 }
             className={"modal"}
             overlayClassName={"modal-fondo"}
-
         >
             <h1 className="text-4xl pb-3"> Nuevo evento </h1>
             <hr  className="pb-4"/>
