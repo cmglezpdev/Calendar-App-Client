@@ -1,5 +1,6 @@
 import { useDispatch } from 'react-redux';
-import { startLogin } from '../../actions/auth';
+import Swal from 'sweetalert2';
+import { startLogin, startRegister } from '../../actions/auth';
 import { useForm } from '../../hooks/useForm';
 
 
@@ -7,6 +8,7 @@ export const LoginScreen = () => {
 
   const dispatch = useDispatch();
 
+  // Login handling
   const [ formLoginValues, handleLoginInputChanges ] = useForm({
     lEmail: 'test@test.com',
     lPassword: '123456789',
@@ -17,6 +19,33 @@ export const LoginScreen = () => {
     event.preventDefault();
     dispatch( startLogin(lEmail,lPassword) );
   }
+
+  // Register handling
+
+  const [ formRegisterValues, handleRegisterInputChanges ] = useForm({
+    rName: 'Pepito',
+    rEmail: 'pepe@emailpepe.com',
+    rPassword: '123456789',
+    rConfirmPassword: '123456789',
+  });
+  const { rEmail, rPassword, rName, rConfirmPassword } = formRegisterValues;
+
+  const handleRegister = ( event ) => {
+    event.preventDefault();
+    
+    if( rPassword !== rConfirmPassword ) {
+      Swal.fire('Error', 'The password aren\'t the same', 'error');
+      return;
+    }
+
+    dispatch( startRegister({
+      name: rName,
+      email: rEmail,
+      password: rPassword
+    }) );
+  }
+
+
 
 
   return (
@@ -53,27 +82,39 @@ export const LoginScreen = () => {
 
       <div className="w-1/2 bg-blue-800 flex flex-col py-12 px-14 min-h-max">
         <h1 className="w-full text-center text-2xl p-5 text-white font-bold">Register</h1>
-          <form className="bg-purple-20">
+          <form className="bg-purple-20" onSubmit={handleRegister}>
             
             <input
               className="w-full p-3 rounded-md mb-4 focus:outline-none text-lg text-gray-600" 
               type="text" 
               placeholder="Nombre"
+              name='rName'
+              value={rName}
+              onChange={handleRegisterInputChanges}
             />
             <input
               className="w-full p-3 rounded-md mb-4 focus:outline-none text-lg text-gray-600" 
               type="email" 
               placeholder="Email"
+              name='rEmail'
+              value={rEmail}
+              onChange={handleRegisterInputChanges}
             />
             <input 
               className="w-full p-3 rounded-md mb-4 focus:outline-none text-lg" 
               type="password"
               placeholder="Password"
+              name='rPassword'
+              value={rPassword}
+              onChange={handleRegisterInputChanges}
             />
             <input 
               className="w-full p-3 rounded-md mb-4 focus:outline-none text-lg" 
               type="password"
               placeholder="Repeat Password"
+              name='rConfirmPassword'
+              value={rConfirmPassword}
+              onChange={handleRegisterInputChanges}
             />
             
             <button
