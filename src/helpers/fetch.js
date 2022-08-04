@@ -17,6 +17,30 @@ const fetchWithoutToken = ( endpoint, data, method = '' ) => {
 
 }
 
+const fetchWithToken = ( endpoint, data, method = '' ) => {
+    const url = `${BASE_URL}/${endpoint}`;
+ 
+    if( method === 'GET' )
+        return fetch(url, {
+            method,
+            headers: {
+                'x-token': localStorage.getItem('token') || ''
+            }
+        });
+        
+        return fetch(url, {
+        method,
+        headers: {
+            'Content-type': 'application/json',
+            'x-token': localStorage.getItem('token') || ''
+        },
+        body: JSON.stringify(data)
+    })
+
+}
+
+
 export {
-    fetchWithoutToken
+    fetchWithoutToken,
+    fetchWithToken
 }
