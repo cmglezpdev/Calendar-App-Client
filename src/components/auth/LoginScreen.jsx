@@ -1,21 +1,46 @@
+import { useDispatch } from 'react-redux';
+import { startLogin } from '../../actions/auth';
+import { useForm } from '../../hooks/useForm';
+
 
 export const LoginScreen = () => {
+
+  const dispatch = useDispatch();
+
+  const [ formLoginValues, handleLoginInputChanges ] = useForm({
+    lEmail: 'test@test.com',
+    lPassword: '123456789',
+  });
+  const { lEmail, lPassword } = formLoginValues;
+
+  const handleLogin = ( event ) => {
+    event.preventDefault();
+    dispatch( startLogin(lEmail,lPassword) );
+  }
+
+
   return (
     <div className="flex max-w-6xl mx-auto mt-24 shadow-2xl shadow-back">
       <div className="bg-gray-100 w-1/2 flex flex-col py-12 px-14 min-h-max">
         <h1 className="w-full text-center text-2xl p-5 font-bold">Login</h1>
-        <form className="bg-purple-20">
+        <form className="bg-purple-20" onSubmit={handleLogin}>
           
           <input
             className="w-full p-3 border-2 focus:border-gray-400 rounded-md mb-4 focus:outline-none text-lg text-gray-600" 
             type="email" 
             placeholder="Email"
-            />
+            name='lEmail'
+            value={lEmail}
+            onChange={handleLoginInputChanges}
+          />
           
           <input 
             className="w-full p-3 border-2 focus:border-gray-400 rounded-md mb-4 focus:outline-none text-lg" 
             type="password"
             placeholder="Password"
+            name='lPassword'
+            value={lPassword}
+            onChange={handleLoginInputChanges}
           />
           
           <button
