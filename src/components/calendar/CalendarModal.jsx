@@ -22,7 +22,7 @@ const initEvent = {
 
 export const CalendarModal = () => {
     
-    const [titleValid, setTitleValid] = useState(null);
+    const [titleValid, setTitleValid] = useState(true);
     const [dateStart, setDateStart] = useState(NOW)
     const [dateEnd, setDateEnd] = useState(NOW_PLUS_ONE)
     const [formValues, setFormValues] = useState(initEvent);
@@ -141,9 +141,8 @@ export const CalendarModal = () => {
                     <input 
                         type="text" 
                         className={`p-2 border-gray-700 border-2 rounded outline-none
-                         ${ titleValid === false  && 'border-red-600 text-red-600' }
-                         ${ titleValid === true  && 'border-green-600 text-green-600'}
-                         `}
+                         ${ titleValid === false && 'border-red-600 text-red-600' }
+                        `}
                         placeholder="Título del evento"
                         name="title"
                         value={title}
@@ -151,7 +150,6 @@ export const CalendarModal = () => {
                         autoComplete="off"
                     />
                     { titleValid === false && <i className="fas fa-sad-tear absolute right-8 mt-11 text-red-600"></i> }
-                    { titleValid === true &&  <i className="fas fa-smile-beam absolute right-8 mt-11 text-green-600"></i> }
                     <small id="emailHelp" className="mt-2 text-gray-600">Una descripción corta</small>
                 </div>
 
