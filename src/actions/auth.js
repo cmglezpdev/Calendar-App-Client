@@ -82,3 +82,14 @@ export const startChecking = () => {
 const checkingFinish = () => ({
     type: types.authCheckingFinish
 })
+
+
+export const startLogout = () => {
+    return (dispatch) => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('token-init-date');
+        dispatch( logout() );
+    }
+}
+
+const logout = () => ({ type: types.authLogout })
