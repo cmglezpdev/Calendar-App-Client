@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
@@ -13,7 +13,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'moment/locale/es';
 import { messages_es } from '../../helpers/calendar-messages-es'
 import { uiOpenModal } from "../../actions/ui";
-import { eventClearActiveEvent, eventSetActive } from "../../actions/events";
+import { eventClearActiveEvent, eventSetActive, eventStartLoading } from "../../actions/events";
 import { AddNewFab } from "../ui/AddNewFab";
 import { DeleteEventFab } from "../ui/DeleteEventFab";
 moment.locale('es');
@@ -55,9 +55,14 @@ export const CalendarScreen = () => {
 
   const onSelectSlot = (e) => {
     // dispatch( uiOpenModal() ) TODO: crear un evento desde aqui
-
     dispatch( eventClearActiveEvent() );
   }
+
+  useEffect(() => {
+    dispatch( eventStartLoading() );
+  }, [dispatch])
+  
+
 
   return (
     <div className="flex flex-col h-screen">

@@ -6,7 +6,7 @@ import moment from "moment";
 import Swal from "sweetalert2";
 
 import { uiCloseModal } from '../../actions/ui.js';
-import { eventAddNew, eventClearActiveEvent, eventUpdated } from "../../actions/events.js";
+import { eventClearActiveEvent, eventStartAddNew, eventUpdated } from "../../actions/events.js";
 
 Modal.setAppElement('#root');
 const NOW = moment().minutes(0).second(0).add(1, 'hours').toDate();
@@ -87,14 +87,7 @@ export const CalendarModal = () => {
         if ( activeEvent ) { // Estoy modificando un evento
             dispatch( eventUpdated( formValues ) );
         } else { // Estoy añadiendo nueva nota
-            dispatch(eventAddNew({
-                ...formValues,
-                id: new Date().getTime(),
-                user: {
-                    id: 12345,
-                    name: 'Carlos',
-                }
-            }));
+            dispatch(eventStartAddNew(formValues));
         }
 
         setTitleValid(true);
