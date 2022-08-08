@@ -1,7 +1,7 @@
-import Swal from "sweetalert2";
-import { fetchWithToken } from "../helpers/fetch";
-import { preprocessEvents } from "../helpers/preprocess-events";
-import { types } from "../types";
+import Swal from 'sweetalert2';
+import { fetchWithToken } from '../helpers/fetch';
+import { preprocessEvents } from '../helpers/preprocess-events';
+import { types } from '../types';
 
 
 export const eventStartAddNew = ( event ) => {
@@ -77,13 +77,14 @@ export const eventStartDeleted = () => {
 
         try {
             
-            const { activeEvent } = getState(state => state.events);
-
-            const resp = await fetchWithToken(`events/${activeEvent.uid}`);
+            const { id } = getState().calendar.activeEvent;
+            const resp = await fetchWithToken(`events/${id}`, {}, 'DELETE');
             const body = await resp.json();
             
             if( body.ok ) {
                 dispatch( eventDeleted() );
+            } else {
+                Swal.fire('Error', body.msg, 'error');
             }
 
         } catch (error) {
