@@ -13,7 +13,7 @@ export const types = {
     eventStartDeleted: '[event] Start Delete Event',
     eventDeleted: '[event] Delete Event',
     eventLoaded: '[event] Events Loaded',
-
+    eventLogout: '[event] Logout',
 
     authCheckingFinish: '[auth] Finish Checking login State',
     authStartLogin: '[auth] Start Login',

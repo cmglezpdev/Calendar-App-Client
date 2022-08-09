@@ -88,8 +88,10 @@ export const startLogout = () => {
     return (dispatch) => {
         localStorage.removeItem('token');
         localStorage.removeItem('token-init-date');
+        dispatch( eventLogout() );
         dispatch( logout() );
     }
 }
 
 const logout = () => ({ type: types.authLogout })
+const eventLogout = () => ({ type: types.eventLogout })
