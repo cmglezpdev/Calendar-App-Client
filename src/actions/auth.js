@@ -18,7 +18,6 @@ export const startLogin = ( email, password ) => {
             }) );
         } 
         else {
-            console.log(body)
             Swal.fire('Error', body.msg, 'error');
         }
         
@@ -65,7 +64,7 @@ export const startChecking = () => {
         if( body.ok ) {
             localStorage.setItem('token', body.token);
             localStorage.setItem('token-init-date', new Date().getTime());
-            console.log(body)
+            
             dispatch( login({
                 uid: body.uid,
                 name: body.name
