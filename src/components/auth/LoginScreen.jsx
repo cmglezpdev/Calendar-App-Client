@@ -10,8 +10,8 @@ export const LoginScreen = () => {
 
   // Login handling
   const [ formLoginValues, handleLoginInputChanges ] = useForm({
-    lEmail: 'test@test.com',
-    lPassword: '123456789',
+    lEmail: '',
+    lPassword: '',
   });
   const { lEmail, lPassword } = formLoginValues;
 
@@ -23,10 +23,10 @@ export const LoginScreen = () => {
   // Register handling
 
   const [ formRegisterValues, handleRegisterInputChanges ] = useForm({
-    rName: 'Pepito',
-    rEmail: 'pepe@emailpepe.com',
-    rPassword: '123456789',
-    rConfirmPassword: '123456789',
+    rName: '',
+    rEmail: '',
+    rPassword: '',
+    rConfirmPassword: '',
   });
   const { rEmail, rPassword, rName, rConfirmPassword } = formRegisterValues;
 
